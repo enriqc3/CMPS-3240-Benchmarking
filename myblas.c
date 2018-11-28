@@ -47,3 +47,29 @@ void d_initMat( const int n, double* A ) {
       for ( int j = 0; j < n; j++ ) 
          A[ i + j * n ] = 2 * rand() / (double) RAND_MAX - 1; // [-1,1]
 }
+
+// Code to randomly initialize a vector
+void f_initVect( const int n, float* A ) {
+  for ( int i = 0; i < n; i++ ) 
+    A[ i ] = 2 * rand() / (float) RAND_MAX - 1; // [-1,1]
+}
+
+// Code to randomly initialize a matrix
+void f_initMat( const int n, float* A ) {
+   for ( int i = 0; i < n; i++ ) 
+      for ( int j = 0; j < n; j++ ) 
+         A[ i + j * n ] = 2 * rand() / (float) RAND_MAX - 1; // [-1,1]
+}
+
+// Code to randomly initialize a vector
+void i_initVect( const int n, int* A ) {
+  for ( int i = 0; i < n; i++ ) 
+    A[ i ] = 2 * rand() / (double) RAND_MAX - 1; // [-1,1]
+}
+
+// Code to randomly initialize a matrix
+void i_initMat( const int n, int* A ) {
+   for ( int i = 0; i < n; i++ ) 
+      for ( int j = 0; j < n; j++ ) 
+         A[ i + j * n ] = 2 * rand() / (double) RAND_MAX - 1; // [-1,1]
+}
