@@ -44,7 +44,7 @@ int	main( int argc, char *argv[] ) {
    TYPE *X = (TYPE *) malloc( N * sizeof(TYPE) );   // First vector
    TYPE *Y = (TYPE *) malloc( N * sizeof(TYPE) );   // Second vector
    TYPE *Result = (TYPE *) malloc( N * sizeof(TYPE) );   // Result vector
-   
+
    // Carry out the operation
    OPERATION( N, A, X, Y, Result );
 
