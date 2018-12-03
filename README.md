@@ -23,7 +23,7 @@ On a Mac, run the command: ```xcode-select --install``` in the terminal to insta
 
 ### Windows
 
-The labs in this class assume that you're using the basic command terminal in Windows, not the git bash or Cygwin.
+The labs in this class assume that you're using *PowerShell* in Windows, not the git bash, Cygwin or the basic terminal.
 
 If you're on Windows you should download MinGW, a port of GNU's GCC for Windows. The link is here: http://www.mingw.org/. Make sure to install the C++ package. You also need make, which can be downloaded here: http://gnuwin32.sourceforge.net/packages/make.htm. After both installations, add the binaries of both MinGW and C++ to the path.
 
