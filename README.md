@@ -25,6 +25,8 @@ On a Mac, run the command: ```xcode-select --install``` in the terminal to insta
 
 If you're on Windows you should download MinGW, a port of GNU's GCC for Windows. The link is here: http://www.mingw.org/. Make sure to install the C++ package. You also need make, which can be downloaded here: http://gnuwin32.sourceforge.net/packages/make.htm. After both installations, add the binaries of both MinGW and C++ to the path.
 
+You may also need git to download the files in this repository. This can be found here: https://git-scm.com/download/win. 
+
 ## Objectives
 
 * Benchmark different processors with a fixed benchmark program
