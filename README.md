@@ -10,7 +10,20 @@ The start of your own BLAS library
 
 ## Requirements
 
-* This lab, and further labs based on creating your own basic linear algebra subprograms (BLAS) library, are intended for unix-based operating systems (Linux or mac)
+* make and GCC (or MinGW on Windows)
+
+### Linux
+
+If you're on Ubuntu/Debian, run: ```sudo apt-get install build-essential```  which should install make and GCC. 
+*If using Odin you should not need to install additional programs.*
+
+### Mac
+
+On a Mac, run the command: ```xcode-select --install``` in the terminal to install both GCC and make.
+
+### Windows
+
+If you're on Windows you should download MinGW, a port of GNU's GCC for Windows. The link is here: http://www.mingw.org/. Make sure to install the C++ package. You also need make, which can be downloaded here: http://gnuwin32.sourceforge.net/packages/make.htm. After both installations, add the binaries of both MinGW and C++ to the path.
 
 ## Objectives
 
