@@ -10,7 +10,7 @@ The start of your own BLAS library
 
 ## Requirements
 
-* make and GCC (or MinGW on Windows) If you're on Ubuntu/Debian, run: ```sudo apt-get install build-essential```  which should install make and GCC. *If using Odin you should not need to install additional programs.*
+* make and GCC (or MinGW on Windows). If you're on Ubuntu/Debian, run: ```sudo apt-get install build-essential```  which should install make and GCC. *If using Odin you should not need to install additional programs.*
 
 ## Objectives
 
