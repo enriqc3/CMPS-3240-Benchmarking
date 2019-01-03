@@ -10,4 +10,4 @@ void fdot( int length, int *X, int *Y, int *Result );
 /* Double-precision matrix multiplication. Has multiplications, additions and ...
  * will stress the cache because of re-references of the same index.
  */
-void daxpy( int length, double a, double *X, double *Y, double *Result ); 
+void dgemm ( int length, double *X, double *Y, double *Result );
