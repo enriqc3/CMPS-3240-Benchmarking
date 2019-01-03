@@ -79,81 +79,37 @@ The `-Wall` flag enables all warnings from the compiler. The `-O0` flag prevents
 
 ### Part 1 - AXPY
 
-The start of our BLAS library has only one operation called "A times X plus Y" abbreviated as "AXPY". It carries out the following operation:
-
-a * X + Y
-
-where a is a scalar, and X and Y are vectors (Nx1 matrixes) of the same length. This operation involves a multiplication, and an addition. AXPY operations on a large vector are a good candidate for a benchmark operation to compare different processors. 
-
-Study `myblas.h`. There are three operations:
+The start of our BLAS library has only three operations defined. Open up `myblash.h` with `vim myblas.h`:
 
 ```c
-// AXPY operations
-void iaxpy( const int length, int a, int *X, int *Y, int *Result ); // For ints
-void faxpy( const int length, float a, float *X, float *Y, float *Result ); // For floats
-void daxpy( const int length, double a, double *X, double *Y, double *Result ); // For doubles
+void iaxpy( int length, int a, int *X, int *Y, int *Result ); 
+float fdot( int length, float *X, float *Y );
+void dgemm ( int length, double *X, double *Y, double *Result );
 ```
 
-these are all the same operation, except that they take different types as an input. There are three types of operations we will consider for our BLAS library: integers, single-precision floating point values, and double-precision floating point values. Integers and single-precision floating point values take 32 bits per value, whereas a double-precision floating point value takes 64 bits. Integers are the fastest operation and double-precision floating point operations are the slowest. *Just ignore the helper functions for now. They randomly initialize an array and are not needed for this lab.*
+If you're curious about what these do, feel free to read about them using whatever resources at your disposal. If you haven't taken linear algebra yet, just understand that these are array operations that can be very costly:
 
-Now consider `myblas.c`. At the top I define the AXPY operation with a C macro:
+* `iaxpy` - an operation called "A times X plus Y" abbreviated as "AXPY". The prefix `i` indicates it is meant for integers. Element-wise, it multiplies the scalar A times Xi and adds that to Yi. It is a linear cost operation. Carrying out an iaxpy operation with two large arrays will test the integer multiplication and addition operations of a processor. 
+* `fdot` - an operation called dot product. The prefix `f` indicates it is meant for single-precision floating point values. Element-wise, it multiplies Xi and Yi, and cummulatively sums the result. Unlike the other operations, it returns a scalar. It is a linear cost operation. Carrying out an fdot operation with two large arrays will test the floating point multiplication operations of a processor. 
+* `dgemm` - an operation called Double Precision Generic Matrix Multiplication (DGEMM). It performs a very specific linear algebra operation called a matrix multiplication. Not only does it test floating point operations, it has many rereferences of the same index and (unlike the other operations) should test the processor's cache as well.
+
+Study `myblas.c` before proceeding. When you have a general understanding of what's going on, proceed. The idea for this lab is to create test programs for each of these operations that will initialize the appropriate inputs of a *very* arbitrary size. So large that it will test the performance of a processor. Take a look at `test_iaxpy.c`. It initializes variables to carry out an AXPY operation: 
 
 ```c
-#define AXPY(i, a, X, Y) (a) * (X)[i] + (Y)[i]
+    // Vector is size arg[1] x 1
+    const int N = atoi( argv[1] );    
+    printf( "Running operation of size %d x 1", N );
+
+    /* Create three N x 1 matrixes on the heap
+     * using malloc, also create a scalar
+     */
+    int A = 13;                                      // Arbitrary value
+    int *X = (int *) malloc( N * sizeof(int) );      // First vector
+    int *Y = (int *) malloc( N * sizeof(int) );      // Second vector
+    int *Result = (int *) malloc( N * sizeof(int) ); // Result vector
 ```
 
-Consider the `int` version of AXPY:
-
-```c
-// Integer version
-void iaxpy( const int length, int a, int *X, int *Y, int *Result ) {
-	for( int i = 0; i < length; i++ )
-		Result[i] = AXPY(i, a, X, Y);
-}
-```
-
-This steps through the arrays and carries out the AXPY operation, defined by the `AXPY` macro. Now consider `test_program.c`. The `myblas.o` library does not actually contain a program it only contains helper subroutines that carry out basic linear algebra routines (as the name BLAS implies). `test_program.c` is set up as a benchmark program that runs the AXPY operation over an array of a size given during run time. First, consider the macros:
-
-```c
-// For convenience, changes types and function names with macros.
-#define DP
-
-#ifdef DP 
-  #define TYPE double
-  #define CONST_VAL 1.1
-  #define OPERATION daxpy
-#endif
-#ifdef SP 
-  #define TYPE float
-  #define CONST_VAL 1.1
-  #define OPERATION faxpy
-#endif
-#ifdef INT 
-  #define TYPE int
-  #define CONST_VAL 1
-  #define OPERATION iaxpy
-#endif
-```
-
-there are three types of AXPY operations: `iaxpy`, `daxpy` and `faxpy`. Specifying `#define DP` triggers the `#ifdef DP` block. This block sets the type to double, and indicates that the function (to be called later) should be `daxpy`. This might seem like a confusing way to define this, but it makes for a more convienient way to recompile the program separately for `int`s, `float`s and `double`s. We will need to benchmark the processor later on for each of these cases. 
-
-The program initializes variables to carry out an AXPY operation: 
-
-```c
-// Vector is size arg[1] x 1
-const int N = atoi( argv[1] );    
-printf( "Running operation of size %d x 1", N );
-
-/* Create three N x 1 matrixes on the heap
- * using malloc, also create a scalar
- */
-TYPE A = CONST_VAL; // Some arbitrary value for scalar A
-TYPE *X = (TYPE *) malloc( N * sizeof(TYPE) );   // First vector
-TYPE *Y = (TYPE *) malloc( N * sizeof(TYPE) );   // Second vector
-TYPE *Result = (TYPE *) malloc( N * sizeof(TYPE) );   // Result vector
-```
-
-The size of the arrays is given at run-time as an argument via `atoi( argv[1] )`. `CONST_VAL` is defined via macro because 1.0 is a floating point literal and 1 is an integer literal, and this will vary based on the type of operation being carried out. `malloc` is used rather than defining an array the standard way via `TYPE[N]` because you cannot dynamically declare an array the later way. `malloc` will create an array for you dynamically provided that you specify the size of the array in bits. However, when allocating memory this way you must always free the memory via `free()`:
+The size of the arrays is given at run-time as an argument via `atoi( argv[1] )`. `malloc` is used rather than defining an array the standard way via `TYPE[N]` because you cannot dynamically declare an array the later way. `malloc` will create an array for you dynamically provided that you specify the size of the array in bits. However, when allocating memory this way you must always free the memory via `free()`:
 
 ```c
 free( X );
@@ -161,17 +117,20 @@ free( Y );
 free( Result );
 ```
 
-You should not need to modify `myblas.c` at all for this lab. You will need to tweak the `#define` at the top of `test_program.c` to switch the program to test `int`s, `float`s and `double`s. 
+Before proceeding to the next section, study `test_iaxpy.c` and do the following:
+
+* Create a test program for `fdot` from `test_iaxpy.c`, and make appropriate targets for it in the makefile.
+* Repeat for `dgemm`
 
 ### Part 2 - Benchmarking
 
-Now to the benchmarking. You can use the `time` command to time the performance of the benchmark. For the input size N, we want some arbitrarily large value so that we can really see the difference in run times for varying instruction types.  `test_program.c` comes configured for double-precision floating points. When running any experiment, you want to run it *at least three times* and take the average, so we use a bit of scripting to call a timing operation on `./test_program` three times:
+Now to the benchmarking. You can use the `time` command to time the performance of the benchmark. For the input size N, we want some arbitrarily large value so that we can really see the difference in run times for varying instruction types. When running any experiment, you want to run it *at least three times* and take the average, so we use a bit of scripting to call a timing operation on `./test_iaxpy` three times. Insert the following into the command line:
 
 ```shell
-$ for i in {1..3}; do time ./test_program 200000000; done;
+$ for i in {1..3}; do time ./test_iaxpy 200000000; done;
 ```
 
-This command runs the command `time ./test_program 200000000`, which, out of the box will run a DAXPY operation on vectors of size 200000000x1. On my old Dell T5500 I get the following:
+This command runs the command `time ./test_iaxpy 200000000`, which, out of the box will run a `iaxpy` operation on vectors of size 200000000x1. On my old Dell T5500 I get the following:
 
 ```shell
 Running operation of size 200000000 x 1
@@ -188,18 +147,31 @@ user	0m1.686s
 sys	0m1.125s
 ```
 
-Recall from the text that real (wall) time includes the time that was spent by the operating system allocating memory and doing I/O. We want to focus on the user time. So, for double-precision floating points my old T5500 has an average of 2.813 seconds. To test `int`s and `float`s you will need to change the `#define DP` to `#define SP` and `#define INT` respectively, recompiling each time. For reference, I get 1.492 seconds for single-precision floating points and 1.484 seconds for integers.
-
-You should run this benchmark operation on odin for each of the three data types. You should get faster results because I have a slower processor. To determine what processor you are running via the command line execute:
+Recall from the text that real (wall) time includes the time that was spent by the operating system allocating memory and doing I/O. We want to focus on the user time. So, for iaxpy my old T5500 has an average of 1.423 seconds. You should run this benchmark operation on odin for each of the three operations. You should get faster results because I have a slower processor. To determine what processor you are running via the command line execute:
 
 ```shell
 $ cat /proc/cpuinfo | grep "model name"
 model name	: Intel(R) Xeon(R) CPU           E5606  @ 2.13GHz
 ```
 
-You will get something different on Sleipnir. Carry out the a benchmark of AXPY for three different instruction types on at least one more computer (other than odin). Some suggestions: the local machine you're using to ssh to odin on, or your macbook.
+you can also get the cache size with the following:
 
-## Lab requirements
+```shell
+$ cat /proc/cpuinfo | grep "cache size"
+cache size	: 25600 KB
+```
 
-You should have a table in your report with the average run time for the AXPY operation for integers and the two types of floating point values, for three different computers. The first computer is my T5500 (the results given in this manual), the second should be odin, and the third should be some other Linux machine.
+You will get something different on Sleipnir. Carry out the a benchmark of AXPY for three operations on at least one more computer (other than odin). Some suggestions: the local machine you're using to ssh to odin on (if linux), Sleipnir, or your macbook.
 
+## Check off
+
+For check off, do the following:
+
+* Show your version of the DGEMM test program to the instructor
+* Compile your results into a table, and show your results to the instructor. It should look something like:
+
+
+| Operation | `iaxpy` | `fdot` | `dgemm` |
+| :--- | :--- | :--- | :--- |
+| `odin.cs.csubak.edu` |  |  |  |
+| Local machine |  |  |  |
