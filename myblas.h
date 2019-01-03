@@ -4,7 +4,7 @@ void iaxpy( int length, int a, int *X, int *Y, int *Result );
 
 // DOT operations
 // Single-precision multiplication
-void fdot( int length, int *X, int *Y, int *Result ); 
+single fdot( int length, single *X, single *Y );
 
 // GEMM
 /* Double-precision matrix multiplication. Has multiplications, additions and ...
