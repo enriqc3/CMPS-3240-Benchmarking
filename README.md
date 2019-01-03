@@ -175,3 +175,4 @@ For check off, do the following:
 | :--- | :--- | :--- | :--- |
 | `odin.cs.csubak.edu` |  |  |  |
 | Local machine |  |  |  |
+| My linux laptop |  |  |  |
