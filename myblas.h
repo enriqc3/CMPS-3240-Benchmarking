@@ -1,12 +1,13 @@
 // AXPY operations
-void iaxpy( const int length, int a, int *X, int *Y, int *Result );
-void faxpy( const int length, float a, float *X, float *Y, float *Result );
-void daxpy( const int length, double a, double *X, double *Y, double *Result );
+// Integer-based multiplication and addition
+void iaxpy( int length, int a, int *X, int *Y, int *Result ); 
 
-// Helper functions
-void d_initVect( const int n, double* A );
-void d_initMat( const int n, double* A );
-void f_initVect( const int n, float* A );
-void f_initMat( const int n, float* A );
-void i_initVect( const int n, int* A );
-void i_initMat( const int n, int* A );
+// DOT operations
+// Single-precision multiplication
+void fdot( int length, int *X, int *Y, int *Result ); 
+
+// GEMM
+/* Double-precision matrix multiplication. Has multiplications, additions and ...
+ * will stress the cache because of re-references of the same index.
+ */
+void daxpy( int length, double a, double *X, double *Y, double *Result ); 
