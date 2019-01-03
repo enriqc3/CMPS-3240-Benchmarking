@@ -1,20 +1,48 @@
 # CMPS-3240-Benchmarking
-The start of your own BLAS library
+Benchmarking linear algebra subroutines
+
+## Objectives
+
+* Learn how to benchmark a processor given an arbitrary subroutine
+* Benchmark several machines and compare performance
 
 ## Prerequisites
 
 * Read Chapter 1.6
 * Understand that microprocessors have a varying clock rate, CPI and program performance
 * Understand difference between execution time (also known as wall time), user time and system time
-* Familiarize yourself with the operation, generic matrix multiplication (GEMM) in Figure 3.21 as C code
+* Familiarize yourself with the following linear algebra operations: dot product, matrix multiplication (book has C code), and AXPY
 
 ## Requirements
 
+### General
+
+* Knowledge of linux CLI and GCC
+* Some experience with C language `printf()`
+* Some experience with `make`
+
+### Software
+
+This lab requires the following software:
+
+* `gcc`
+* `make`
+* `git`
+
+odin.cs.csubak.edu has these already installed.
+
+
 * make and GCC (or MinGW on Windows). If you're on Ubuntu/Debian, run: ```sudo apt-get install build-essential```  which should install make and GCC. *If using Odin you should not need to install additional programs.*
 
-## Objectives
+### Compatability
 
-* Benchmark different processors with a fixed benchmark program
+| Linux | Mac | Windows |
+| :--- | :--- | :--- |
+| Yes | Yes | Untested<sup>*</sup> |
+
+<sup>*</sup>Untested, but assuming that you have `gcc`, `make` and `git` installed it should work.
+
+This lab requires you to test a benchmark program across multiple environments (PCs), so you're encouraged to try this across multiple environments.
 
 ## Background
 
@@ -26,7 +54,7 @@ Thus, comparing microprocessors just on clock rates is an invalid way to compare
 
 The execution time of a program is calculated as (instr./program)x(cycles/instr.)x(s/cycle) where (s/cycle) is the inverse of the clock rate. The (cycles/instr.) and (s/cycle) vary from microprocessor to microprocessor. However, when comparing two processors a common practice is to fix program thus fixing the (instr./program). You may have done this before by running a benchmark program on your machine. Examples are SPEC, passmark, dhrystone, whetsone, SETI@home, jack the ripper, and so on. 
 
-The purpose of this lab is to start your very own BLAS library that we will continuously improve over the course with our knowledge of computer architecture. You will be given a starting framework and use this code to benchmark multiple machines.
+The purpose of this lab is to start your very own basic linear algebra subroutine (BLAS) library that we will continuously improve over the course with our knowledge of computer architecture. You will be given a starting framework and use this code to benchmark multiple machines.
 
 ## Approach
 
