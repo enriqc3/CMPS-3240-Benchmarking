@@ -35,7 +35,7 @@ void dgemm ( int n, double *X, double *Y, double *Result) {
 /********************************************
  * Dot operations
  * A linear algebra operation that carries out
- * 	Result(i) = X(i) * Y(i)
+ * 	Result = SUM_i( X(i) * Y(i) )
  * where a is a scalar, and X and Y are vectors
  * of the same length.
  ********************************************/
