@@ -23,13 +23,13 @@ void iaxpy( int length, int a, int *X, int *Y, int *Result ) {
  * explanation. Hennessey and Patterson 5e.
  ********************************************/
 
-void dgemm ( int n, double* A, double* B, double* C) {
+void dgemm ( int n, double *X, double *Y, double *Result) {
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < n; ++j) {
-            double cij = C[i+j*n]; /* cij = C[i][j] */
+            double Resultij = Result[i+j*n]; 
             for( int k = 0; k < n; k++ )
-                cij += A[i+k*n] * B[k+j*n]; /* cij += A[i][k]*B[k][j] */
-            C[i+j*n] = cij; /* C[i][j] = cij */
+                Resultij += X[i+k*n] * Y[k+j*n]; 
+            Result[i+j*n] = cij; 
         }
 }
 
