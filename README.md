@@ -18,7 +18,7 @@ Benchmarking linear algebra subroutines
 ### General
 
 * Knowledge of linux CLI and GCC
-* Some experience with C language `printf()`
+* Some experience with C language heap allocation via `malloc`
 * Some experience with `make`
 
 ### Software
@@ -29,18 +29,17 @@ This lab requires the following software:
 * `make`
 * `git`
 
-odin.cs.csubak.edu has these already installed.
+`odin.cs.csubak.edu` has these already installed.
 
-
-* make and GCC (or MinGW on Windows). If you're on Ubuntu/Debian, run: ```sudo apt-get install build-essential```  which should install make and GCC. *If using Odin you should not need to install additional programs.*
+* make and GCC (or MinGW on Windows). If you're on Ubuntu/Debian, run: ```sudo apt-get install build-essential && sudo apt-get install git```  which should install these three things. *If using Odin you should not need to install additional programs.*
 
 ### Compatability
 
 | Linux | Mac | Windows |
 | :--- | :--- | :--- |
-| Yes | Yes | Untested<sup>*</sup> |
+| Yes | Maybe<sup>*</sup> | Maybe<sup>*</sup> |
 
-<sup>*</sup>Untested, but assuming that you have `gcc`, `make` and `git` installed it should work.
+<sup>*</sup>Untested, but assuming that you have `gcc`, `make` and `git` installed it should work. With Windows, I could never get `gcc` to work with Cygwin, so you're on your own there.
 
 This lab requires you to test a benchmark program across multiple environments (PCs), so you're encouraged to try this across multiple environments.
 
@@ -130,44 +129,44 @@ Now to the benchmarking. You can use the `time` command to time the performance 
 $ for i in {1..3}; do time ./test_iaxpy 200000000; done;
 ```
 
-This command runs the command `time ./test_iaxpy 200000000`, which, out of the box will run a `iaxpy` operation on vectors of size 200000000x1. On my old Dell T5500 I get the following:
+This command runs the command `time ./test_iaxpy 200000000`, which, out of the box will run a `iaxpy` operation on vectors of size 200000000x1. On my own Dell Latitude E5470 laptop I get the following:
 
 ```shell
 Running operation of size 200000000 x 1
-real	0m2.813s
-user	0m1.538s
-sys	0m1.270s
+real    0m1.230s
+user    0m0.791s
+sys     0m0.438s
 Running operation of size 200000000 x 1
-real	0m2.815s
-user	0m1.659s
-sys	0m1.154s
+real    0m1.228s
+user    0m0.789s
+sys     0m0.439s
 Running operation of size 200000000 x 1
-real	0m2.811s
-user	0m1.686s
-sys	0m1.125s
+real    0m1.220s
+user    0m0.733s
+sys     0m0.484s
 ```
 
-Recall from the text that real (wall) time includes the time that was spent by the operating system allocating memory and doing I/O. We want to focus on the user time. So, for iaxpy my old T5500 has an average of 1.423 seconds. You should run this benchmark operation on odin for each of the three operations. You should get faster results because I have a slower processor. To determine what processor you are running via the command line execute:
+Recall from the text that real (wall) time includes the time that was spent by the operating system allocating memory and doing I/O. We want to focus on the user time. So, for `iaxpy` my Dell Latitude E5470 has an average of 0.771 seconds. You should run this benchmark operation on `odin.cs.csubak.edu` for each of the three operations. *This means you must make benchmark programs for `fdot` and `dgemm` because they are not provided with the repo.* You should get faster results because I have a slower processor. To determine what processor you are running via the command line execute:
 
 ```shell
 $ cat /proc/cpuinfo | grep "model name"
-model name	: Intel(R) Xeon(R) CPU           E5606  @ 2.13GHz
+model name	: Intel(R) Core(TM) i5-6440HQ CPU @ 2.60GHz
 ```
 
 you can also get the cache size with the following:
 
 ```shell
 $ cat /proc/cpuinfo | grep "cache size"
-cache size	: 25600 KB
+cache size	: 6144KB KB
 ```
 
-You will get something different on `sleipnir.cs.csubak.edu` and other machones. Carry out the a benchmark of the three operations:
+You will get something different on `odin.cs.csubak.edu`, `sleipnir.cs.csubak.edu` and the other machines you intend to benchmark. Carry out the a benchmark of the three operations:
 
 * `iaxpy`
 * `fdot` 
 * `dgemm`
 
-each on at least one more computer (other than odin). Some suggestions: the local machine you're using to ssh to odin on (if linux), Sleipnir, or your macbook.
+each on at least one more computer (other than odin). Some suggestions: the local machine you're using to ssh to `odin.cs.csubak.edu` on (if linux), `sleipnir.cs.csubak.edu` (if you have a login for that), your macbook, etc.
 
 ## Check off
 
