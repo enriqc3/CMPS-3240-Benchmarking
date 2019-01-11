@@ -162,9 +162,9 @@ cache size	: 6144KB KB
 
 You will get something different on `odin.cs.csubak.edu`, `sleipnir.cs.csubak.edu` and the other machines you intend to benchmark. Carry out the a benchmark of the three operations:
 
-* `iaxpy`
-* `fdot` 
-* `dgemm`
+* `iaxpy` - For N = 200000000
+* `fdot` - For N = 200000000
+* `dgemm` - For N = 1024. Do not try to run this for N = 200000000 the operation is too large run even on `odin.cs.csubak.edu`.
 
 each on at least one more computer (other than odin). Some suggestions: the local machine you're using to ssh to `odin.cs.csubak.edu` on (if linux), `sleipnir.cs.csubak.edu` (if you have a login for that), your macbook, etc.
 
@@ -178,6 +178,7 @@ For check off, do the following:
 
 | Operation | `iaxpy` | `fdot` | `dgemm` |
 | :--- | :--- | :--- | :--- |
+| Instructor's Dell Latitude E5470 | 0.771 | 0.790 | 4.11 |
 | `odin.cs.csubak.edu` |  |  |  |
 | Local machine |  |  |  |
 | My linux laptop |  |  |  |
