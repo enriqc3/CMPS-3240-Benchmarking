@@ -123,13 +123,13 @@ Before proceeding to the next section, study `test_iaxpy.c` and do the following
 
 ### Part 2 - Benchmarking
 
-Now to the benchmarking. You can use the `time` command to time the performance of the benchmark. For the input size N, we want some arbitrarily large value so that we can really see the difference in run times for varying instruction types. When running any experiment, you want to run it *at least three times* and take the average, so we use a bit of scripting to call a timing operation on `./test_iaxpy` three times. Insert the following into the command line:
+Now to the benchmarking. You can use the `time` command to time the performance of the benchmark. For the input size N, we want some arbitrarily large value so that we can really see the difference in run times for varying instruction types. When running any experiment, you want to run it *at least three times* and take the average, so we use a bit of scripting to call a timing operation on `./test_iaxpy.out` three times. Insert the following into the command line:
 
 ```shell
-$ for i in {1..3}; do time ./test_iaxpy 200000000; done;
+$ for i in {1..3}; do time ./test_iaxpy.out 200000000; done;
 ```
 
-This command runs the command `time ./test_iaxpy 200000000`, which, out of the box will run a `iaxpy` operation on vectors of size 200000000x1. On my own Dell Latitude E5470 laptop I get the following:
+This command runs the command `time ./test_iaxpy.out 200000000`, which, out of the box will run a `iaxpy` operation on vectors of size 200000000x1. On my own Dell Latitude E5470 laptop I get the following:
 
 ```shell
 Running operation of size 200000000 x 1
