@@ -178,7 +178,7 @@ For check off, do the following:
 
 | Operation | `iaxpy` | `fdot` | `dgemm` |
 | :--- | :--- | :--- | :--- |
-| Instructor's Dell Latitude E5470 | 0.771 | 0.790 | 4.11 |
+| Instructor's Dell Latitude E5470 | 0.771 | 0.790 | 4.110 |
 | `odin.cs.csubak.edu` |  |  |  |
 | Local machine |  |  |  |
 | My linux laptop |  |  |  |
