@@ -161,7 +161,13 @@ $ cat /proc/cpuinfo | grep "cache size"
 cache size	: 25600 KB
 ```
 
-You will get something different on Sleipnir. Carry out the a benchmark of AXPY for three operations on at least one more computer (other than odin). Some suggestions: the local machine you're using to ssh to odin on (if linux), Sleipnir, or your macbook.
+You will get something different on `sleipnir.cs.csubak.edu` and other machones. Carry out the a benchmark of the three operations:
+
+* `iaxpy`
+* `fdot` 
+* `dgemm`
+
+each on at least one more computer (other than odin). Some suggestions: the local machine you're using to ssh to odin on (if linux), Sleipnir, or your macbook.
 
 ## Check off
 
