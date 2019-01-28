@@ -194,7 +194,7 @@ For check off, do the following:
 
 | Operation | `iaxpy` | `fdot` | `dgemm` |
 | :--- | :--- | :--- | :--- |
-| Instructor's Dell Latitude E5470 | 0.771 | 0.790 | 4.110 |
-| `odin.cs.csubak.edu` |  |  |  |
+| Dell Latitude E5470 w/ Intel Core i5-6440HQ | 0.771 | 0.790 | 4.110 |
+| `odin.cs.csubak.edu` w/ Intel Xeon E5-2630 v4 |  |  |  |
 | Local machine |  |  |  |
 | My linux laptop |  |  |  |
