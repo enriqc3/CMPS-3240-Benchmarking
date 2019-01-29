@@ -18,6 +18,15 @@ void iaxpy( int length, int a, int *X, int *Y, int *Result ) {
  * A linear algebra operation that carries out matrix multiplication of two 
  * matrixes. See Fig. 3.21. in the text book for an explanation. Hennessey 
  * and Patterson 5e.
+ *
+ * Though the book calls this a *generic* matrix multiplication, a proper GEMM
+ * does the following:
+ *
+ * (Scalar alpha) * (Matrix A) * (Matrix B) + (Scalar beta) * (Matrix C)
+ *
+ * Where A is size n x p, B is size p x m and C is size n x m. This imp-
+ * lementation does not multiply scalars, does not add C, and assumes A and B
+ * are the same size and square (n x n in size).
  ****************************************************************************/
 
 void dgemm ( int n, double *X, double *Y, double *Result) {
