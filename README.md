@@ -59,7 +59,11 @@ Thread model: posix
 InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 ```
 
-You will get something similar depending on what version of Mac OS X you are using.
+You will get something similar depending on what version of Mac OS X you are using. If you're getting errors with `gcc` in Mac, sometimes doing this will help:
+
+```shell
+$ xcode-select --reset
+```
 
 ## Background
 
