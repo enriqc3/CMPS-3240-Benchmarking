@@ -209,6 +209,15 @@ You will get something different on `odin.cs.csubak.edu`, `sleipnir.cs.csubak.ed
 
 each on at least one more computer (other than odin). Some suggestions: the local machine you're using to ssh to `odin.cs.csubak.edu` on (if linux), `sleipnir.cs.csubak.edu` (if you have a login for that), your macbook, etc.
 
+### Mac
+
+On Mac, `cat /proc/cpuinfo` does not work. To get the cpu information from the command line execute:
+
+```bash
+$ sysctl -n machdep.cpu.brand_string  
+Intel(R) Core(TM) i7-5557U CPU @ 3.10GHz
+```
+
 ## Check off
 
 For check off, do the following:
@@ -219,7 +228,8 @@ For check off, do the following:
 
 | Operation | `iaxpy` | `fdot` | `dgemm` |
 | :--- | :--- | :--- | :--- |
-| Dell Latitude E5470 w/ Intel Core i5-6440HQ | 0.771 | 0.790 | 4.110 |
+| Dell Latitude E5470 w/ Intel Core i5-6440HQ (Plugged in) | 0.771 | 0.790 | 4.110 |
+| 2014 Macbook Pro w/ Intel Core i7-5557U (Unplugged) | 0.925 | 0.836 | 12.776 |
 | `odin.cs.csubak.edu` w/ Intel Xeon E5-2630 v4 |  |  |  |
 | Local machine |  |  |  |
 | My linux laptop |  |  |  |
