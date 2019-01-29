@@ -225,11 +225,10 @@ For check off, do the following:
 * Show your version of the DGEMM test program to the instructor
 * Aggregate your results into a table, and show your results to the instructor. It should look something like:
 
-
 | Operation | `iaxpy` | `fdot` | `dgemm` |
 | :--- | :--- | :--- | :--- |
-| Dell Latitude E5470 w/ Intel Core i5-6440HQ (Plugged in) | 0.771 | 0.790 | 4.110 |
-| 2014 Macbook Pro w/ Intel Core i7-5557U (Unplugged) | 0.925 | 0.836 | 12.776 |
+| Dell Latitude E5470 w/ Intel Core i5-6440HQ | 0.771 | 0.790 | 4.110 |
+| 2014 Macbook Pro w/ Intel Core i7-5557U | 0.925 | 0.836 | 12.776 |
 | `odin.cs.csubak.edu` w/ Intel Xeon E5-2630 v4 |  |  |  |
 | Local machine |  |  |  |
 | My linux laptop |  |  |  |
