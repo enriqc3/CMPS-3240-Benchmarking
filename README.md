@@ -36,9 +36,30 @@ This lab requires the following software:
 
 | Linux | Mac | Windows |
 | :--- | :--- | :--- |
-| Yes | Maybe<sup>*</sup> | Maybe<sup>*</sup> |
+| Yes | Yes | Untested<sup>*</sup> |
 
 <sup>*</sup>Untested, but assuming that you have `gcc`, `make` and `git` installed it should work. With Windows, I could never get `gcc` to work with Cygwin, so you're on your own there. This lab requires you to test a benchmark program across multiple environments (PCs), so you're encouraged to try this across multiple environments.
+
+#### Mac
+
+Mac is a POSIX operating system and should be most compatible with the labs, which were created on Debian 6.3.0 with GCC version 6.3.0. Mac actually uses `clang`, which is different from `gcc`. In the future, there will be labs that look at assembly code, and the resulting assembly mnemonics will be wildly different between `gcc` and `clang`. You should be OK using your Mac for this lab. xcode should have `gcc`, though it is really an alias to `clang` which may cause some syntactical differences in later labs when we work at the assembly level. 
+
+```shell
+$ xcode-select --install
+```
+
+Verify with the following:
+
+```shell
+$ gcc --version
+Configured with: --prefix=/Library/Developer/CommandLineTools/usr --with-gxx-include-dir=/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include/c++/4.2.1
+Apple LLVM version 10.0.0 (clang-1000.10.44.4)
+Target: x86_64-apple-darwin18.2.0
+Thread model: posix
+InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+```
+
+You will get something similar depending on what version of Mac OS X you are using.
 
 ## Background
 
