@@ -160,7 +160,7 @@ free( Result );
 We also want to use `malloc()` because there are limits to the size of an array declared in the traditional way via `TYPE[N]`--due to system limitations of the size of an arrays that can be allocated on the stack, and we will definitely be exceeding this limit. Before proceeding to the next section, study `test_iaxpy.c`. Do the following:
 
 * Create a test program for `fdot` from `test_iaxpy.c`, and make appropriate targets for it in the makefile.
-* Repeat for `dgemm`. Note that when allocating the arrays for `dgemm` that is is n^2, so your need to modify your allocation as follows: `(double *) malloc( N * N * sizeof(double) )`.
+* Repeat for `dgemm`. Note that when allocating the arrays for `dgemm` that it is n^2 so your need to modify your allocation as follows: `(double *) malloc( N * N * sizeof(double) )`.
 
 ### Part 2 - Benchmarking
 
