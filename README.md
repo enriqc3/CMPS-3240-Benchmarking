@@ -262,6 +262,9 @@ Etc. etc.
 ## Footnotes
 
 <sup>a</sup>Often used for thermal testing to see if you attached our heatsink properly.
+
 <sup>b</sup>Actually, in some environments, if you enable optimization flags, the benchmark code will be audited out of the program entirely because the `for` loop is doing work on arrays that were never initialized, and the result is never used. However, we want the CPU to do the work. We do not care for the result because we are just measuring the arbitrary amount of time it takes a CPU to do the work.
+
 <sup>c</sup>Integer arrays are important to test, even if unsophisticated, because they are 'normal' work, and designs have tended to favor floating point optimization at the expense of regular arithmetic.
+
 <sup>d</sup>It is possible for you to do this within Make as well.
