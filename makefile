@@ -1,5 +1,12 @@
 # This is a comment
 
+# Reasons to use a makefile:
+#	1) Saves having to repeatedly enter the same command. e.g.
+#		Instead of: gcc -o hello.out -c hello.o other.o ...
+#		Type it once in a makefile and: make hello.out
+#		Easier.
+#	2) You can have some advanced scripting going on with a makefile
+
 # The first part of a makefile should contain, by convention, any variables 
 # you intend to use. You might wonder, why do I need variables in my makefile? 
 # Because it provides a convienient place to change things. For example, let's 
@@ -14,7 +21,7 @@ CC=gcc
 # compiler. Note that when you declare a varaible that it counts white space, 
 # so CFLAGS literally is "-Wall -O0"
 CFLAGS=-Wall -O0
-# See the lab manual for an explanation of what these flags do
+# See the lab manual for an explanation of what these flags do.
 
 # This is the end of the variable part of the make file. What follows are 
 # called targets. Targets in a makefile follow this syntax:
@@ -54,7 +61,7 @@ CFLAGS=-Wall -O0
 # Here: myblas.o is a compiled 'library' of sorts and has no executable file. 
 # 'test_iaxpy' is a binary that should be linked with 
 # myblas.o.
-all: myblas.o test_iaxpy
+all: test_iaxpy.out
 
 # By convention, there should also be a 'clean' target which will delete all 
 # .o and .out files. The -f flag is there to force the removal of files, and 
@@ -62,19 +69,11 @@ all: myblas.o test_iaxpy
 clean:
 	rm -f *.o *.out
 
-# The first actual target. Our BLAS library. Here we give myblas.c as the only 
-# dependency, so if there are any changes to myblas.c, make will know to 
-# recompile myblas.o. 
-myblas.o:	myblas.c 
-	${CC} ${CFLAGS} -c $<
-# Note that because it's a library without any executable part it is merely 
-# compiled into a binary file but not linked into an executable file. That 
-# comes later.
-
-# The first target that is a whole program. Note that there are two stages to 
+# The first actual target. Note that there are two stages to 
 # compiling a program: (1) compiling it and (2) linking it.
-# Compiling it produces a .o file, and linking takes all the .o files to create a binary file (.out in this case).
-test_iaxpy:	myblas.o test_iaxpy.o
-	${CC} ${CFLAGS} -o $@.out $^
+# Compiling it produces a .o file, and linking takes all the .o files to create a 
+# binary file (.out in this case).
 test_iaxpy.o:	test_iaxpy.c
-	${CC} ${CFLAGS} -c $<
+	${CC} ${CFLAGS} -c $< -o $@
+test_iaxpy.out:	test_iaxpy.o
+	${CC} ${CFLAGS} -o $@ $<
