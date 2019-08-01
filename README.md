@@ -1,5 +1,4 @@
-# CMPS 3240 Lab
-Introduction to benchmarking
+# CMPS 3240 Lab: Introduction to benchmarking
 
 ## Objectives
 
