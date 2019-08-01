@@ -261,7 +261,7 @@ Etc. etc.
 
 ## Footnotes
 
-<sup>a</sup>Often used for thermal testing to see if you attached our heatsink properly.
+<sup>a</sup>Often used for thermal testing to see if you attached your heatsink properly.
 
 <sup>b</sup>Actually, in some environments, if you enable optimization flags, the benchmark code will be audited out of the program entirely because the `for` loop is doing work on arrays that were never initialized, and the result is never used. However, we want the CPU to do the work. We do not care for the result because we are just measuring the arbitrary amount of time it takes a CPU to do the work.
 
