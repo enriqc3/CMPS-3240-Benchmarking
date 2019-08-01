@@ -1,5 +1,5 @@
-# CMPS-3240-Benchmarking
-Benchmarking linear algebra subroutines
+# CMPS 3240 Lab
+Introduction to benchmarking
 
 ## Objectives
 
