@@ -6,21 +6,18 @@ During this lab you will:
 
 * Benchmark a processor with arbitrary subroutines that you have coded yourself,
 * Compare several machines according to the benchmarks, and
-* Code in Make and C language
-
-using any machine (you may use your own POSIX laptop).
+* Code in Make and C-language.
 
 ## Prerequisites
 
 This lab assumes you have read or are familiar with the following topics:
 
-* Chapter 1.6
+* Chapter 1.6 (Clock rate, CPI and program performance)
 * Knowledge of linux command line interface (CLI) and `gcc`
-* Clock rate, CPI and program performance
 * Difference between execution time (also known as wall time), user time and system time
 * Linear algebra operations: dot product, matrix multiplication (book has C code, calls it `dgemm()`), and AXPY
 * Some experience with C language
-** Heap allocation via `malloc()`
+* C-language: Heap allocation via `malloc()` and `free()`
 * Some experience with `make`
 
 Please study these topics if you are not familiar with them so that the lab can be completed in a timely manner.
@@ -37,91 +34,65 @@ This lab requires the following software:
 * `make`
 * `git`
 
-`odin.cs.csubak.edu` has these already installed. If you're on Ubuntu/Debian, run: ```sudo apt-get install build-essential && sudo apt-get install git```  which should install these three things. 
+`odin.cs.csubak.edu` has these already installed. If you're on Ubuntu/Debian and you're not certain if these things are installed run: 
 
-This course will use Makefiles to automate compiling your code. For this lab manual I'm assuming you've worked with Make before. If you haven't, the `makefile` included in this repository is simple enough to learn from. Take time to read the comments if this is your first time with Make.
+```bash
+$ sudo apt install build-essential git
+```  
+
+which should install these three things. This course will use Makefiles to automate compiling your code. For this lab manual I'm assuming you've worked with Make before. If you haven't, the `makefile` included in this repository is simple enough to learn from. Take time to read the comments if this is your first time with Make.
 
 ### Compatability
 
 | Linux | Mac | Windows |
 | :--- | :--- | :--- |
-| Yes | Yes | Untested<sup>*</sup> |
+| Yes | Yes | Untested |
 
-<sup>*</sup>Untested, but assuming that you have `gcc`, `make` and `git` installed it should work. With Windows, I could never get `gcc` to work with Cygwin, so you're on your own there. This lab requires you to test a benchmark program across multiple environments (PCs), so you're encouraged to try this on machines with different configurations.
-
-#### Mac
-
-Mac is a POSIX operating system and should be most compatible with the labs, which were created on Debian 6.3.0 with GCC version 6.3.0. However, Mac actually uses `clang` compiler, which is different from `gcc`. They alias `gcc` to `clang`, so even if you call `gcc` you are not using it. In the future, there will be labs that look at assembly code, and the resulting assembly mnemonics will be wildly different between `gcc` and `clang`. You should be OK using your Mac for this lab. If you plan to use your laptop, you should install xcode which will contain `clang`/`gcc`:
-
-```shell
-$ xcode-select --install
-```
-
-Verify with the following:
-
-```shell
-$ gcc --version
-Configured with: --prefix=/Library/Developer/CommandLineTools/usr --with-gxx-include-dir=/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include/c++/4.2.1
-Apple LLVM version 10.0.0 (clang-1000.10.44.4)
-Target: x86_64-apple-darwin18.2.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-```
-
-You will get something similar depending on what version of Mac OS version you are using. If you're getting errors with `gcc` in Mac, sometimes doing this will help:
-
-```shell
-$ xcode-select --reset
-```
-
-This is not a complete manual for how to install a C compiler on your machine and if things get off the rails you may want to just use a departmental computer/server.
-
-#### Windows
-
-TODO: Windows.
+For Mac and Windows see the Appendix.
 
 ## Background
 
-Processors can vary quite a bit in their clock rate, CPI and program performance. Most PC-builders often only pay attention to the clock rate of a CPU but this is just the tip of the iceberg. Two AMD and Intel microprocessors may have the same clock rate, but the number of clock cycles it takes to execute a single instruction can vary wildly. This is due to the following:
+Processors can vary quite a bit in their clock rate, CPI and program performance. Most PC-builders often only pay attention to the clock rate of a CPU but this is the tip of the iceberg. Consider two processors with the same clock rate. There is no guarantee they complete an instruction in the same amount of cycles. This is due to:
 
-* Instructions types (such as branching, arithmetic, floating point) take a varying amount of clock cycles
-* How the instruction is implemented in hardware (via logic gates) will cause a varying amount of clock cycles per instruction 
-* A varying number and type of instructions for a program
+* Instructions types take a varying amount of clock cycles.
+* How manufacturers design the hardware (logic gates).
+* Varying number and type of instructions for a program.
 
-Thus, comparing microprocessors just on clock rates is a flawed way to compare them; especially when a benchmark program is not brought up, which would define the number and types of instructions.
+Thus, clock rate alone is a flawed way to compare two processors. A benchmark program is often required. This defines the number and type of instructions.
 
-The execution time of a program is calculated as (instr./program)x(cycles/instr.)x(s/cycle) where (s/cycle) is the inverse of the clock rate. The (cycles/instr.) and (s/cycle) vary from microprocessor to microprocessor. However, when comparing two processors a common practice is to fix program thus fixing the (instr./program). You may have done this before by running a benchmark program on your machine. There are industry and commercial standard benchmarks:
+The execution time of a program is (instr./program)x(cycles/instr.)x(s/cycle) where (s/cycle) is the inverse of the clock rate. The (cycles/instr.) and (s/cycle) vary from microprocessor to microprocessor. It is common practice is to use a single program thus fixing the (instr./program). This is often called benchmarking. The program used is called a benchmark program. There are industry and commercial standard benchmarks:
 
 * https://www.spec.org/benchmarks.html
 * https://www.passmark.com/
 * https://www.eembc.org/
 
-Benchmarks that individuals have created that are commonly used (but not standard):
+Non-standard benchmarks by individuals:
 
 * Dhrystone
 * Whetsone
 
-And some benchmarks were not intended for benchmarking at all. But, they are so computationally intensive that computing enthusiasts use them a relative test of performance:
+Programs not intended as a benchmark but are often used as one:
 
 * Folding@home
 * SETI@home
 * Jack the ripper
 * Prime95<sup>a</sup>
 
-The purpose of this lab is to start your very set of benchmark programs. Some of these subroutines will be revisited and continuously improved over the course with our knowledge of computer architecture. You will be given a starting framework and use this code to benchmark multiple machines.
+The purpose of this lab is to create your own benchmark programs. We will revisit and improve these throughout the course. This repository has a starting framework to test on different machines. Perhaps the results will surprise you.
 
 ## Approach
 
 ### Part 0 - Verify `git`, `make` and `gcc`
 
-If you're on `odin.cs.csubak.edu`, skip this step because `git`, `make` and `gcc` should be installed. The following instructions run through executing each one of these programs and will indicate if your non-odin local machine needs these things to be installed. Download this repository:
+If you're on `odin.cs.csubak.edu` skip this step. `git`, `make` and `gcc` should be installed. The following will indicate if your machine needs these things to be installed. Open a terminal, change the directory to your intended working directoy and download this repository:
 
-```shell
+```base
 $ git clone https://github.com/DrAlbertCruz/CMPS-3240-Benchmarking.git
+...
 $ cd CMPS-3240-Benchmarking
 ```
 
-Running `make all` will compile the benchmark program into `test_iaxpy.out`, as well as its pre-linked binary `test_iaxpy.o`.
+Running `make all` compiles the benchmark into `test_iaxpy.out`, as well as its pre-linked binary `test_iaxpy.o`.
 
 ```shell
 $ make
@@ -129,11 +100,11 @@ gcc -Wall -O0 -c test_iaxpy.c -o test_iaxpy.o
 gcc -Wall -O0 -o test_iaxpy.out test_iaxpy.o
 ```
 
-By default Make will execute the first target in the file. The `-Wall` flag enables all warnings from the compiler. The `-O0` flag prevents the compiler from performing any optimizations under the hood. In time, we will implement our own optimizations, and when we do so we will want to make sure that only *our* optimizations are being carried out, and not ones done automatically by the compiler on our behalf.<sup>b</sup> If you got to this point without any issues, you are clear to proceed to the next part of the lab. 
+By default Make will execute the first target in the file. The `-Wall` flag enables all warnings from the compiler. The `-O0` flag prevents the compiler from performing any optimizations under the hood. We do not want the compiler to introduce unintended optimizations.<sup>b</sup> If you got to this point without any issues, you are clear to proceed to the next part of the lab. 
 
 ### Part 1 - AXPY
 
-The goal of this lab is to implement three different benchmark programs:
+The goal of this lab is to implement three benchmark programs:
 
 ```c
 void iaxpy( int length, int a, int *X, int *Y, int *Result ); 
@@ -141,13 +112,25 @@ float fdot( int length, float *X, float *Y );
 void dgemm ( int length, double *X, double *Y, double *Result );
 ```
 
-If you're curious about what these do, feel free to read about them using whatever resources at your disposal. If you haven't taken linear algebra yet, just understand that these are array operations that can be very costly:
+`iaxpy()` has been provided. Feel free to read these operations using whatever resources at your disposal. These operations are costly array operations:
 
-* `iaxpy` - an operation called "A times X plus Y" abbreviated as "AXPY". The prefix `i` indicates it is meant for integers. Element-wise, it multiplies the scalar A times Xi and adds that to Yi. It is a linear cost operation. Carrying out an iaxpy operation with two large arrays will test the integer multiplication and addition operations of a processor.<sup>c</sup> 
-* `fdot` - an operation called dot product. The prefix `f` indicates it is meant for single-precision floating point values. Element-wise, it multiplies Xi and Yi, and cummulatively sums the result. Unlike the other operations, it returns a scalar. It is a linear cost operation. Carrying out an fdot operation with two large arrays will test the floating point multiplication operations of a processor. 
-* `dgemm` - an operation called Double Precision Generic Matrix Multiplication (DGEMM). It performs a very specific linear algebra operation called a matrix multiplication. Not only does it test floating point operations, it has many rereferences of the same index and (unlike the other operations) should test the processor's cache as well. This is a polynomial n^2 cost operation.
+* `iaxpy` - an operation called *A times X plus Y* abbreviated as *AXPY*. The prefix `i` indicates integers. Element-wise multiplication of scalar A times `x[i]` and add `y[i]`. It is a linear cost operation. This tests integer multiplication and addition operations of a processor.<sup>c</sup> 
+* `fdot` - an operation called dot product. The prefix `f` indicates single-precision floating point values (`float`). Element-wise multiplication of `x[i]` and `y[i]`, and cummulatively sum the result. It is linear cost. `fdot()` tests the floating point multiplication speed of a processor. 
+* `dgemm` - an operation *Generic Matrix Multiplication* (DGEMM). `d` indicates double-precision floating point. Carries out a matrix multiplication. Tests floating point operations. It also tests the cache with many rereferences of the same index. This is a polynomial n^2 cost operation.
 
-Study `text_iaxpy.c` before proceeding. When you have a general understanding of what's going on, proceed. The idea for this lab is to create test programs for each of these operations that will initialize the appropriate inputs of a *very* large size. So large that it will test the performance of a processor. Take a look at `test_iaxpy.c`. It declares and defines `iaxpy()`:
+Study `text_iaxpy.c` before proceeding. When you have a general understanding proceed. The idea is to create test programs for each of these operations. Each benchmark should contain the following:
+
+1. The code for the operation
+2. In `main()`, allocate space for arrays on the heap with `malloc()`
+3. Call the operation from `main()`
+4. Free the memory with `free()` 
+
+ that will initialize the appropriate inputs of a *very* large size. So large that it will test the performance of a processor. Take a look at `test_iaxpy.c` by opening the file with your favorite text editor:
+
+ ```bash
+ $ vim `text_iaxpy.c`
+ ```
+The code declares and defines `iaxpy()`:
 
 ```c
 void iaxpy( int length, int A, int *X, int *Y, int *Result ) {
@@ -169,7 +152,7 @@ int *Result = (int *) malloc( N * sizeof(int) );
 iaxpy( N, A, X, Y, Result );
 ```
 
-The size of the arrays is defined at compie-time as `N`. `malloc()` is used rather than defining an array the standard way via `TYPE[N]` because you cannot dynamically declare an array the later way. `malloc()` will create an array for you dynamically provided that you specify the size of the array in bits. However, when allocating memory this way you must always free the memory via `free()` when done:
+The size of the arrays is defined at compile-time as `N`. `malloc()` is used rather than defining an array the standard way via `TYPE[N]` because you cannot dynamically declare an array the later way. `malloc()` returns a pointer to an array of the size passed by argument. However, when allocating memory this way you must always free the memory via `free()` when done:
 
 ```c
 free( X );
@@ -180,7 +163,7 @@ free( Result );
 We also want to use `malloc()` because there are limits to the size of an array declared in the traditional way via `TYPE[N]`--due to system limitations of the size of an arrays that can be allocated on the stack, and we will definitely be exceeding this limit. Before proceeding to the next section, study `test_iaxpy.c`. Do the following:
 
 * Create a test program for `fdot` from `test_iaxpy.c`, and make appropriate targets for it in the makefile.
-* Repeat for `dgemm`. Note that when allocating the arrays for `dgemm` that it is n^2 so your need to modify your allocation as follows: `(double *) malloc( N * N * sizeof(double) )`.
+* Repeat for `dgemm`. Note that when allocating the arrays for `dgemm` that it is n^2 so your need to modify your allocation as follows: `(double *) malloc( N * N * sizeof(double) )`. *This code is given as an example in the textbook.*
 
 ### Part 2 - Benchmarking
 
@@ -209,7 +192,6 @@ sys 0m0.476s
 ```
 
 Recall from the text that real (wall) time includes the time that was spent by the operating system allocating memory and doing I/O. We want to focus on the user time. So, for `iaxpy` my Dell Latitude E5470 has an average of ~0.9 seconds. You should run this benchmark operation on `odin.cs.csubak.edu` for each of the three operations. *This means you must make benchmark programs for `fdot` and `dgemm` because they are not provided with the repo.* You should get faster results because I have a slower processor. You want to run the experiment many times because factors out of your control may skew you measurement. For example, there may be too many people running the same benchmark at that exact moment.
-
 To determine what processor you are running via the command line execute:
 
 ```shell
@@ -257,6 +239,37 @@ For check off, do the following:
 | My linux laptop |  |  |  |
 
 Etc. etc.
+
+## Appendix - Mac 
+
+Mac is a POSIX operating system and should be most compatible with the labs, which were created on Debian 6.3.0 with GCC version 6.3.0. However, Mac actually uses `clang` compiler, which is different from `gcc`. They alias `gcc` to `clang`, so even if you call `gcc` you are not using it. In the future, there will be labs that look at assembly code, and the resulting assembly mnemonics will be wildly different between `gcc` and `clang`. You should be OK using your Mac for this lab. If you plan to use your laptop, you should install xcode which will contain `clang`/`gcc`:
+
+```shell
+$ xcode-select --install
+```
+
+Verify with the following:
+
+```shell
+$ gcc --version
+Configured with: --prefix=/Library/Developer/CommandLineTools/usr --with-gxx-include-dir=/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include/c++/4.2.1
+Apple LLVM version 10.0.0 (clang-1000.10.44.4)
+Target: x86_64-apple-darwin18.2.0
+Thread model: posix
+InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+```
+
+You will get something similar depending on what version of Mac OS version you are using. If you're getting errors with `gcc` in Mac, sometimes doing this will help:
+
+```shell
+$ xcode-select --reset
+```
+
+This is not a complete manual for how to install a C compiler on your machine and if things get off the rails you may want to just use a departmental computer/server.
+
+## Appendix - Windows
+
+Untested, but assuming that you have `gcc`, `make` and `git` installed it should work. With Windows, I could never get `gcc` to work with Cygwin, so you're on your own there. This lab requires you to test a benchmark program across multiple environments (PCs), so you're encouraged to try this on machines with different configurations.
 
 ## Footnotes
 
