@@ -30,7 +30,7 @@ The following is a list of requirements to complete the lab. Some labs can compl
 
 This lab requires the following software:
 
-* `gcc`
+* `gcc` version 8.3.0
 * `make`
 * `git`
 
@@ -46,7 +46,7 @@ which should install these three things. This course will use Makefiles to autom
 
 | Linux | Mac | Windows |
 | :--- | :--- | :--- |
-| Yes | Yes | Untested |
+| Yes | Yes | Yes, with WSL |
 
 For Mac and Windows see the Appendix.
 
@@ -270,9 +270,7 @@ This is not a complete manual for how to install a C compiler on your machine an
 
 ## Appendix - Windows
 
-Untested, but assuming that you have `gcc`, `make` and `git` installed it should work. With Windows, I could never get `gcc` to work with Cygwin, so you're on your own there. This lab requires you to test a benchmark program across multiple environments (PCs), so you're encouraged to try this on machines with different configurations.
-
-Alternatively, if you have Windows 10, you may want to install the Windows Subsystem. The labs are designed to work on Debian/Ubuntu.
+It is possible for you to continue this lab on Windows if you install the Windows Subsystem for Linux (WSL).<sup>e</sup> Please make sure you install Debian 10 for consistency with the lab manual. Once this is done refer to the Linux subsection for installation/checking of appropriate software. Keep in mind that WSL maintains a separate home directory from the local Windows user, so you may want to use symbolic links to save time when navigating to things you download/edit.
 
 ## Footnotes
 
@@ -283,3 +281,6 @@ Alternatively, if you have Windows 10, you may want to install the Windows Subsy
 <sup>c</sup>Integer arrays are important to test, even if unsophisticated, because they are 'normal' work, and designs have tended to favor floating point optimization at the expense of regular arithmetic.
 
 <sup>d</sup>It is possible for you to do this within Make as well.
+
+<sup>e</sup>https://docs.microsoft.com/en-us/windows/wsl/install-win10
+
